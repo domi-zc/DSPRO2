@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# virtual env
+.python-version
+
+# python
+__pycache__/
