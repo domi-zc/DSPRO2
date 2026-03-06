@@ -1,18 +1,32 @@
 from pose_estimation import PoseEstimator
 from source_frames import SourceFrame
 from display import display_video_with_annotations
+from counting import Counter
+from smoothing import smooth_angle
+from angle import calculate_angle
 
 
 def main():
-    sf = SourceFrame()
-    pe = PoseEstimator()
+    source_frame = SourceFrame()
+    pose_estimator = PoseEstimator()
+    counter = Counter()
+    old_angle = None
     
     while True:
-        frame = sf.get_frames()
-        result = pe.estimate_pose(frame)
+        frame = source_frame.get_frames()
+        result = pose_estimator.estimate_pose(frame)
+        
+        if result.pose_landmarks:
+            shoulder, elbow, wrist = result.pose_landmarks.landmark[12], result.pose_landmarks.landmark[14], result.pose_landmarks.landmark[16]
+            angle = calculate_angle(shoulder, elbow, wrist)
+        
+            angle = smooth_angle(old_angle, angle)
+            old_angle = angle
+            reps = counter.count_reps(angle, elbow, wrist)
+            print(f"Reps: {reps}, Angle: {int(angle)}°")
         
         # Arm keypoints
-        selected_landmarks=range(11,17)
+        selected_landmarks=[12, 14, 16]
         if display_video_with_annotations(frame, result.pose_landmarks, selected_landmarks):
             break
         
