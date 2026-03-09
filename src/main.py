@@ -16,13 +16,19 @@ def main():
 
     counter = Counter()
     old_angle = None
+    landmarks = None
 
     while True:
-        frame_timestamp, frame = source_frame.get_frames()
+        frame_data = source_frame.get_frames()
+        if frame_data is None:
+            print("Failed to read frame from camera.")
+            continue
+
+        frame_timestamp, frame = frame_data
         result = pose_estimator.estimate_pose(frame_timestamp, frame)
-        landmarks = result.pose_landmarks[0]
 
         if result.pose_landmarks:
+            landmarks = result.pose_landmarks[0]
             shoulder, elbow, wrist = landmarks[12], landmarks[14], landmarks[16]
             angle = calculate_angle(shoulder, elbow, wrist)
 
