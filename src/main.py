@@ -17,7 +17,7 @@ def main():
 
     landmarks = None
 
-    exercise_name = "biceps_curls_right"
+    exercise_name = "biceps_curls"
     current_exercise = Exercises.exercises[exercise_name]
 
     while True:
@@ -30,7 +30,7 @@ def main():
         result = pose_estimator.estimate_pose(frame_timestamp, frame)
 
         features = calculate_features(result, current_exercise.features_needed)
-        reps = current_exercise.count_reps(features)
+        current_exercise.count_reps(features)
 
         current_exercise.display_count()
 
