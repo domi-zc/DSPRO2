@@ -1,18 +1,59 @@
 from smoothing import smooth_angle
+from abc import ABC, abstractmethod
 
 
-class BicepsCurls():
+
+class Exercise(ABC):
+    def __init__(self, threshold_up=45, threshold_down=130):
+        self.threshold_up = threshold_up
+        self.threshold_down = threshold_down
+        self.state = "UP"
+        self.reps = 0
+
+    @property
+    @abstractmethod
+    def features_needed(self):
+        pass
+
+    @abstractmethod
+    def count_reps(self, features):
+        pass
+
+    @abstractmethod
+    def display_count(self):
+        pass
+
+
+
+
+
+class BicepsCurls(Exercise):
     def __init__(self):
-        self.features_needed = {"keypoints": {"right_shoulder": 12, "right_elbow": 14, "right_wrist": 16, "left_shoulder": 11, "left_elbow": 13, "left_wrist": 15}, "angles": ["right_elbow_angle", "left_elbow_angle"]}
+        super().__init__(threshold_up=45, threshold_down=130)
+
+        self._features_needed = {
+            "keypoints": {
+                "right_shoulder": 12,
+                "right_elbow": 14,
+                "right_wrist": 16,
+                "left_shoulder": 11,
+                "left_elbow": 13,
+                "left_wrist": 15,
+            },
+            "angles": ["right_elbow_angle", "left_elbow_angle"],
+        }
+
         self.state_right = "UP"
         self.state_left = "UP"
-        self.threshold_up = 45
-        self.threshold_down = 130
         self.reps_right = 0
         self.angle_right = None
         self.reps_left = 0
         self.angle_left = None
-    
+
+    @property
+    def features_needed(self):
+        return self._features_needed
+
     def count_reps(self, features):
         if not features:
             return
@@ -23,12 +64,12 @@ class BicepsCurls():
             self.angle_right = smooth_angle(self.angle_right, angle_right)
         else:
             self.angle_right = angle_right
-            
-        if angle_right < self.threshold_up and self.state_right == "DOWN" and elbow_right.y > wrist_right.y:
+
+        if self.angle_right < self.threshold_up and self.state_right == "DOWN" and elbow_right.y > wrist_right.y:
             self.state_right = "UP"
             self.reps_right += 1
-        
-        if angle_right > self.threshold_down and self.state_right == "UP" and elbow_right.y < wrist_right.y:
+
+        if self.angle_right > self.threshold_down and self.state_right == "UP" and elbow_right.y < wrist_right.y:
             self.state_right = "DOWN"
 
         # count left curls
@@ -37,12 +78,12 @@ class BicepsCurls():
             self.angle_left = smooth_angle(self.angle_left, angle_left)
         else:
             self.angle_left = angle_left
-            
-        if angle_left < self.threshold_up and self.state_left == "DOWN" and elbow_left.y > wrist_left.y:
+
+        if self.angle_left < self.threshold_up and self.state_left == "DOWN" and elbow_left.y > wrist_left.y:
             self.state_left = "UP"
             self.reps_left += 1
-        
-        if angle_left > self.threshold_down and self.state_left == "UP" and elbow_left.y < wrist_left.y:
+
+        if  self.angle_left > self.threshold_down and self.state_left == "UP" and elbow_left.y < wrist_left.y:
             self.state_left = "DOWN"
     
                     
