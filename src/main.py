@@ -38,7 +38,9 @@ def main():
         if result.pose_landmarks:
             landmarks = result.pose_landmarks[0]
         # Arm keypoints
-        if display_video_with_annotations(frame, landmarks):
+
+        exercise_info_specs = {"current_exercise": current_exercise.name, "reps": current_exercise.reps, "state": current_exercise.state}
+        if display_video_with_annotations(frame, landmarks, exercise_info_specs):
             break
 
 if __name__ == "__main__":

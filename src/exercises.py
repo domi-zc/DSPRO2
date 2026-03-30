@@ -3,7 +3,8 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 class Exercise(ABC):
-    def __init__(self, threshold_up=45, threshold_down=130):
+    def __init__(self, name, threshold_up, threshold_down):
+        self.name = name
         self.threshold_up = threshold_up
         self.threshold_down = threshold_down
         self.state = "UP"
@@ -28,7 +29,7 @@ class Exercise(ABC):
 
 class BicepsCurls(Exercise):
     def __init__(self):
-        super().__init__(threshold_up=45, threshold_down=130)
+        super().__init__(name="Bicep Curls", threshold_up=45, threshold_down=130)
 
         self._features_needed = {
             "keypoints": {
@@ -99,6 +100,122 @@ class BicepsCurls(Exercise):
         else:
             left_angle = ""
         print(f"Biceps curls reps right: {self.reps_right}{right_angle}, reps left: {self.reps_left}{left_angle}")
+
+
+
+class PushUps(Exercise):
+    def __init__(self):
+        super().__init__(name="Push-Ups", threshold_up=150, threshold_down=90)
+
+        self._features_needed = {
+            "keypoints": {
+                "nose": 0,
+                "left_shoulder": 11,
+                "right_shoulder": 12,
+                "left_elbow": 13,
+                "right_elbow": 14,
+                "left_wrist": 15,
+                "right_wrist": 16,
+            },
+            "angles": ["right_elbow_angle", "left_elbow_angle"],
+        }
+
+        self.angle = None
+
+
+    @property
+    def features_needed(self):
+        return self._features_needed
+
+    def count_reps(self, features):
+        if not features:
+            return
+
+        wrist_is_below_elbow = features["left_elbow"].y < features["left_wrist"].y and features["right_elbow"].y < features["right_wrist"].y
+        if not wrist_is_below_elbow:
+            return
+
+        raw_angle = (features["right_elbow_angle"] + features["left_elbow_angle"]) / 2
+        elbow_middle_y = (features["left_elbow"].y + features["right_elbow"].y) / 2
+        nose_y = features["nose"].y
+
+        if self.angle is not None:
+            self.angle = smooth_angle(self.angle, raw_angle)
+        else:
+            self.angle = raw_angle
+
+        if self.angle < self.threshold_up and self.state == "DOWN" and elbow_middle_y > nose_y:
+            self.state = "UP"
+            self.reps += 1
+
+        if self.angle > self.threshold_down and self.state == "UP" and elbow_middle_y < nose_y:
+            self.state = "DOWN"
+
+    def display_count(self):
+        print(f"Pushups reps: {self.reps}")
+
+
+
+class PullUps(Exercise):
+    def __init__(self):
+        super().__init__(name="Pull-Ups", threshold_up=60, threshold_down=150)
+
+        self._features_needed = {
+            "keypoints": {
+                "left_shoulder": 11,
+                "right_shoulder": 12,
+                "left_elbow": 13,
+                "right_elbow": 14,
+                "left_wrist": 15,
+                "right_wrist": 16,
+            },
+            "angles": ["right_elbow_angle", "left_elbow_angle"],
+        }
+        self.angle = None
+        self.down_y = None
+
+
+    @property
+    def features_needed(self):
+        return self._features_needed
+
+    def count_reps(self, features):
+        if not features:
+            return
+
+        wrist_is_above_elbow = features["left_elbow"].y > features["left_wrist"].y and features["right_elbow"].y > features["right_wrist"].y
+        if not wrist_is_above_elbow:
+            return
+
+        raw_angle = (features["right_elbow_angle"] + features["left_elbow_angle"]) / 2
+
+        shoulder_middle_y = (features["left_shoulder"].y + features["right_shoulder"].y) / 2
+        elbow_middle_y = (features["left_elbow"].y + features["right_elbow"].y) / 2
+        wrist_middle_y = (features["left_wrist"].y + features["right_wrist"].y) / 2
+
+        shoulder_close_to_wrist = (shoulder_middle_y - wrist_middle_y) / (elbow_middle_y - wrist_middle_y)
+
+        if self.down_y is not None:
+            body_movement = (self.down_y - shoulder_middle_y) / (elbow_middle_y - wrist_middle_y)
+        else:
+            body_movement = 0
+
+        if self.angle is not None:
+            self.angle = smooth_angle(self.angle, raw_angle)
+        else:
+            self.angle = raw_angle
+
+        if self.angle < self.threshold_up and self.state == "DOWN" and shoulder_close_to_wrist < 0.1 and body_movement > 1.2:
+            self.state = "UP"
+            self.reps += 1
+
+        if self.angle > self.threshold_down and self.state == "UP" and shoulder_close_to_wrist > 1.5:
+            self.state = "DOWN"
+            self.down_y = shoulder_middle_y
+
+    def display_count(self):
+        print(f"Pullups reps: {self.reps}")
+
 
     def check_keypoint_visibility(self):
         return super().check_keypoint_visibility()
@@ -177,4 +294,4 @@ class Squats(Exercise):
 
 
 class Exercises():
-    exercises = {"biceps_curls": BicepsCurls(), "squats": Squats()}
+    exercises = {"biceps_curls": BicepsCurls()}
