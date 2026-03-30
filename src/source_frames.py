@@ -2,7 +2,7 @@ import cv2
 import time
 
 class SourceFrame:
-    def __init__(self, start_time, index=2):
+    def __init__(self, start_time, index=0):
         self.cam = cv2.VideoCapture(index)
         self.start_time = start_time
 

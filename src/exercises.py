@@ -226,8 +226,8 @@ class PullUps(Exercise):
         return super().check_keypoint_visibility()
 
 class Squats(Exercise):
-    def __init__(self, threshold_up=170, threshold_down=90):
-        super().__init__(threshold_up, threshold_down)
+    def __init__(self):
+        super().__init__(name="Squats", threshold_up=170, threshold_down=90)
 
         self._features_needed = {
         "keypoints": {
