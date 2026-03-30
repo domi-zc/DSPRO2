@@ -101,6 +101,8 @@ class BicepsCurls(Exercise):
             left_angle = ""
         print(f"Biceps curls reps right: {self.reps_right}{right_angle}, reps left: {self.reps_left}{left_angle}")
 
+    def check_keypoint_visibility(self):
+        return super().check_keypoint_visibility()
 
 
 class PushUps(Exercise):
@@ -153,6 +155,9 @@ class PushUps(Exercise):
 
     def display_count(self):
         print(f"Pushups reps: {self.reps}")
+
+    def check_keypoint_visibility(self):
+        return super().check_keypoint_visibility()
 
 
 
@@ -249,7 +254,7 @@ class Squats(Exercise):
         if not features:
             return
 
-        # Exit if the left or right body side is visible
+        # Exit if neither the left or right side of the body is not visible
         if not self.check_keypoint_visibility(features["right_hip"], features["right_knee"], features["right_ankle"]) \
             and not self.check_keypoint_visibility(features["left_hip"], features["left_knee"], features["left_ankle"]):
             return
@@ -294,4 +299,4 @@ class Squats(Exercise):
 
 
 class Exercises():
-    exercises = {"biceps_curls": BicepsCurls()}
+    exercises = {"pushups": PushUps(), "pullups": PullUps(), "biceps_curls": BicepsCurls(), "squats": Squats()}
