@@ -11,13 +11,14 @@ import time
 def main():
     print('---------- Running ----------')
     source_frame = SourceFrame(start_time=int(time.time() * 1000))
+    # source_frame = SourceFrame.from_video("videos/squat.mp4", start_time=int(time.time() * 1000))
 
     print('---------- Received frames ----------')
     pose_estimator = PoseEstimator()
 
     landmarks = None
 
-    exercise_name = "biceps_curls"
+    exercise_name = "squats"
     current_exercise = Exercises.exercises[exercise_name]
 
     while True:
