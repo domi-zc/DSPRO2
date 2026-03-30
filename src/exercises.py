@@ -4,7 +4,8 @@ from abc import ABC, abstractmethod
 
 
 class Exercise(ABC):
-    def __init__(self, threshold_up=45, threshold_down=130):
+    def __init__(self, name, threshold_up, threshold_down):
+        self.name = name
         self.threshold_up = threshold_up
         self.threshold_down = threshold_down
         self.state = "UP"
@@ -29,7 +30,7 @@ class Exercise(ABC):
 
 class BicepsCurls(Exercise):
     def __init__(self):
-        super().__init__(threshold_up=45, threshold_down=130)
+        super().__init__(name="Bicep Curls", threshold_up=45, threshold_down=130)
 
         self._features_needed = {
             "keypoints": {
@@ -101,8 +102,8 @@ class BicepsCurls(Exercise):
 
 
 class PushUps(Exercise):
-    def __init__(self, threshold_up=150, threshold_down=90):
-        super().__init__(threshold_up, threshold_down)
+    def __init__(self):
+        super().__init__(name="Push-Ups", threshold_up=150, threshold_down=90)
 
         self._features_needed = {
             "keypoints": {
@@ -154,8 +155,8 @@ class PushUps(Exercise):
 
 
 class PullUps(Exercise):
-    def __init__(self, threshold_up=60, threshold_down=150):
-        super().__init__(threshold_up, threshold_down)
+    def __init__(self):
+        super().__init__(name="Pull-Ups", threshold_up=60, threshold_down=150)
 
         self._features_needed = {
             "keypoints": {
