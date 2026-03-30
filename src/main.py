@@ -6,6 +6,7 @@ from angle import calculate_angle
 from feature_extraction import calculate_features
 from exercises import Exercises
 import time
+import cv2
 
 
 def main():
@@ -18,7 +19,8 @@ def main():
 
     landmarks = None
 
-    exercise_name = "squats"
+    keys = list(Exercises.exercises.keys())
+    exercise_name = keys[0]
     current_exercise = Exercises.exercises[exercise_name]
 
     while True:
@@ -33,15 +35,24 @@ def main():
         features = calculate_features(result, current_exercise.features_needed)
         current_exercise.count_reps(features)
 
-        current_exercise.display_count()
+        #current_exercise.display_count()
 
         if result.pose_landmarks:
             landmarks = result.pose_landmarks[0]
         # Arm keypoints
 
         exercise_info_specs = {"current_exercise": current_exercise.name, "reps": current_exercise.reps, "state": current_exercise.state}
-        if display_video_with_annotations(frame, landmarks, exercise_info_specs):
+        display_video_with_annotations(frame, landmarks, exercise_info_specs)
+
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("q") or key == 27:
             break
+
+        if key == ord("s"):
+            idx = keys.index(exercise_name) if exercise_name in keys else -1
+            new_idx = (idx + 1) % len(keys)
+            exercise_name = keys[new_idx]
+            current_exercise = Exercises.exercises[exercise_name]
 
 if __name__ == "__main__":
     main()

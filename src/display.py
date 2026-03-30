@@ -42,10 +42,6 @@ def display_video_with_annotations(frame, landmarks, info={}):
 
     cv2.imshow("video", frame)
 
-    key = cv2.waitKey(1) & 0xFF
-    if key == ord("q") or key == 27:  # q or Esc to quit
-        return True
-    return False
 
 
 
