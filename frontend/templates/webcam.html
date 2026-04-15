@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	<title>The Virtual Coach - Webcam</title>
+{% endblock %}
+
+{% block content %}
+    <div class="tvc-wc">
+        <div class="tvc-wc-video">
+            <video autoplay playsinline></video>
+            <canvas width="1280" height="720"></canvas>
+        </div>
+        <div class="tvc-wc-stats">
+            <div>
+                <p>Current Excercise</p>
+                <h2 data-cursor="-inverse -text">{{ exercise_name }}</h2>
+            </div>
+            <div>
+                <p>Total Reps</p>
+                <div class="tvc-reps-counter tvc-reps-counter-l">
+                    <p data-cursor="-inverse -text">0</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 15 12" xml:space="preserve">
+                        <g>
+                            <g>
+                                <polyline points="1.5, 4.5 4.5, 1.5 7.5, 4.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                                <line x1="4.5" y1="1.5" x2="4.5" y2="10.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                            </g>
+                            <g>
+                                <polyline points="7.5, 7.5 10.5, 10.5 13.5, 7.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                                <line x1="10.5" y1="10.5" x2="10.5" y2="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+                <div class="tvc-reps-counter tvc-reps-counter-r" style="display:none">
+                    <p data-cursor="-inverse -text">0</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 15 12" xml:space="preserve">
+                        <g>
+                            <g>
+                                <polyline points="1.5, 4.5 4.5, 1.5 7.5, 4.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                                <line x1="4.5" y1="1.5" x2="4.5" y2="10.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                            </g>
+                            <g>
+                                <polyline points="7.5, 7.5 10.5, 10.5 13.5, 7.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                                <line x1="10.5" y1="10.5" x2="10.5" y2="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+            <div>
+                <p>Change Excercise</p>
+                <div class="tvc-wc-stats-select">
+                    <select onchange="window.location.href='/webcam?exercise=' + this.value" data-cursor="-inverse -text">
+                        {% for key, name in available_exercises.items() %}
+                            <option value="{{ key }}" {% if exercise_id == key %}selected{% endif %}>   
+                                {{ name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                        <path d="M297.4 470.6C309.9 483.1 330.2 483.1 342.7 470.6L534.7 278.6C547.2 266.1 547.2 245.8 534.7 233.3C522.2 220.8 501.9 220.8 489.4 233.3L320 402.7L150.6 233.4C138.1 220.9 117.8 220.9 105.3 233.4C92.8 245.9 92.8 266.2 105.3 278.7L297.3 470.7z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="tvc-wc-stats-icon">
+                <svg data-cursor="-inverse -text" data-cursor-stick viewBox="0 0 24 24">
+                    <path d="M21.44,2.62s0,0,0,0l0,0A2,2,0,0,0,20,2H14a1,1,0,0,0,0,2h4.59l-5.3,5.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L20,5.41V10a1,1,0,0,0,2,0V4A2,2,0,0,0,21.44,2.62Z"></path>
+                    <path d="M10.71,14.71,5.41,20H10a1,1,0,0,1,0,2H4a2,2,0,0,1-1.38-.56l0,0s0,0,0,0A2,2,0,0,1,2,20V14a1,1,0,0,1,2,0v4.59l5.29-5.3a1,1,0,0,1,1.42,1.42Z"></path>
+                </svg>
+            </div>
+       </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        const currentExerciseId = "{{ exercise_id }}";
+    </script>
+	<script src="{{ url_for('static', path='js/webcam.js') }}"></script>
+{% endblock %}
