@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 16 20" xml:space="preserve">
+    <g>
+        <g>
+            <polyline points="1.5, 4.5 4.5, 1.5 7.5, 4.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+            <line x1="4.5" y1="1.5" x2="4.5" y2="10.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+        </g>
+        <g>
+            <polyline points="7.5, 7.5 10.5, 10.5 13.5, 7.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+            <line x1="10.5" y1="10.5" x2="10.5" y2="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,28 @@
+<header>
+    <div>
+        <a href="{{ url_for('index') }}">
+            <h1 data-cursor="-inverse -text">
+                The Virtual Coach
+            </h1>
+        </a>
+    </div>
+    <div class="tvc-menu-burger">
+        <div class="tvc-icon-wrapper" data-cursor="-inverse -text" data-cursor-stick>
+            <div class="tvc-icon"></div>
+        </div>
+    </div>
+</header>
+<section class="tvc-navigation-overlay">
+    <div class="tvc-navigation-row">
+        <div>
+            <a href="{{ url_for('index') }}" data-cursor="-inverse -text">
+                Home
+            </a>
+        </div>
+        <div>
+            <a href="{{ url_for('webcam') }}" data-cursor="-inverse -text">
+                Webcam
+            </a>
+        </div>
+    </div>
+</section>
