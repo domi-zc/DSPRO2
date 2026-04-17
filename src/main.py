@@ -18,7 +18,7 @@ def main():
 
     landmarks = None
 
-    exercise_name = "squats"
+    exercise_name = "pushups"
     current_exercise = Exercises.exercises[exercise_name]
 
     while True:

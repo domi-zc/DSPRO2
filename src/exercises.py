@@ -226,8 +226,8 @@ class PullUps(Exercise):
         return super().check_keypoint_visibility()
 
 class Squats(Exercise):
-    def __init__(self, threshold_up=170, threshold_down=90):
-        super().__init__(threshold_up, threshold_down)
+    def __init__(self):
+        super().__init__(name="Squats", threshold_up=170, threshold_down=90)
 
         self._features_needed = {
         "keypoints": {
@@ -256,7 +256,7 @@ class Squats(Exercise):
 
         # Exit if neither the left or right side of the body is not visible
         if not self.check_keypoint_visibility(features["right_hip"], features["right_knee"], features["right_ankle"]) \
-            and not self.check_keypoint_visibility(features["left_hip"], features["left_knee"], features["left_ankle"]):
+        and not self.check_keypoint_visibility(features["left_hip"], features["left_knee"], features["left_ankle"]):
             return
 
         # Calculate the average angle of both legs
@@ -295,6 +295,50 @@ class Squats(Exercise):
         print(f"Hip: {hip.visibility}, Knee {knee.visibility}, Ankle {ankle.visibility}")
 
         return hip.visibility > 0.9 and knee.visibility > 0.9 and ankle.visibility > 0.9
+
+
+class SitUps(ABC):
+    def __init__(self):
+        super().__init__(name="SitUps", threshold_up=60, threshold_down=130)
+
+        self._features_needed = {
+        "keypoints": {
+            "right_shoulder": 12,
+            "right_hip": 24,
+            "right_knee": 26,
+            "right_ankle": 28,
+            "left_shoulder": 11,
+            "left_hip": 23,
+            "left_knee": 25,
+            "left_ankle": 27
+        },
+        "angles": ["right_torso_angle", "left_torso_angle"]
+        }
+
+        self.current_angle = None
+        self.state = "UP"
+        self.reps = 0
+
+    @property
+    def features_needed(self):
+        return self._features_needed
+
+    def count_reps(self, features):
+        # Exit on empty features
+        if not features:
+            return
+
+         # Exit if neither the left or right side of the body is not visible
+        if not self.check_keypoint_visibility(features["right_shoulder"], features["right_hip"], features["right_knee"], features["right_ankle"]) \
+        and not self.check_keypoint_visibility(features["left_shoulder"], features["left_hip"], features["left_knee"], features["left_ankle"]):
+            return
+
+    def check_keypoint_visibility(self, shoulder, hip, knee, ankle):
+        """Checks if either the left or rights hip, knee and ankle visibility is over 90%."""
+        print(f"Hip: {hip.visibility}, Knee {knee.visibility}, Ankle {ankle.visibility}")
+
+        return shoulder.visibility > 0.9 and hip.visibility > 0.9 and knee.visibility > 0.9 and ankle.visibility > 0.9
+
 
 
 

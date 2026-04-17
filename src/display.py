@@ -1,11 +1,15 @@
 import cv2
 
 indices = {
-    "bicep_curls": {
+    "pushups": {
+        "points": [0, 11, 13, 15, 12, 14, 16],
+        "connections": [(11, 13), (13, 15), (12, 14), (14, 16)]
+    },
+    "pullups": {
         "points": [11, 13, 15, 12, 14, 16],
         "connections": [(11, 13), (13, 15), (12, 14), (14, 16)]
     },
-    "pushups": {
+    "bicep_curls": {
         "points": [11, 13, 15, 12, 14, 16],
         "connections": [(11, 13), (13, 15), (12, 14), (14, 16)]
     },
@@ -19,8 +23,8 @@ def display_video_with_annotations(frame, landmarks, info={}):
         height, width, _ = frame.shape
 
         # Define the indices for the key points and the connections between them
-        points = indices["squats"]["points"]
-        connections = indices["squats"]["connections"]
+        points = indices["pushups"]["points"]
+        connections = indices["pushups"]["connections"]
 
         # Draw the connection
         for start_idx, end_idx in connections:

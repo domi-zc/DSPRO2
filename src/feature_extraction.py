@@ -53,4 +53,11 @@ def calculate_features(key_points, features_needed):
 
         features['left_knee_angle'] = angle
 
+    if "right_torso_angle" in features_needed["angles"]:
+        angle=calculate_angle(
+            pose_landmarks[features_needed["keypoints"]["right_shoulder"]],
+            pose_landmarks[features_needed["keypoints"]["right_hip"]],
+            pose_landmarks[features_needed["keypoints"]["right_knee"]],
+        )
+
     return features
