@@ -1,0 +1,12 @@
+[project]
+name = "dspro2"
+version = "0.0.1"
+description = "Data Science Projekt II"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi[standard]>=0.136.0",
+    "mediapipe==0.10.18",
+    "numpy<2",
+    "opencv-python-headless>=4.11.0.86",
+]
