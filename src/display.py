@@ -16,15 +16,19 @@ indices = {
     "squats": {
         "points": [23, 25, 27, 24, 26, 28],
         "connections": [(23, 25), (25, 27), (24, 26), (26, 28)]
-    }
+    },
+    "situps":{
+        "points": [11, 23, 25, 27, 12, 24, 26, 28],
+        "connections": [(11, 23), (23, 25), (25, 27), (12, 24), (24, 26), (26, 28)]
+    },
 }
 def display_video_with_annotations(frame, landmarks, info={}):
     if landmarks:
         height, width, _ = frame.shape
 
         # Define the indices for the key points and the connections between them
-        points = indices["pushups"]["points"]
-        connections = indices["pushups"]["connections"]
+        points = indices["situps"]["points"]
+        connections = indices["situps"]["connections"]
 
         # Draw the connection
         for start_idx, end_idx in connections:

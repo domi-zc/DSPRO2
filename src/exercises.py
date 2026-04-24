@@ -259,14 +259,14 @@ class Squats(Exercise):
         and not self.check_keypoint_visibility(features["left_hip"], features["left_knee"], features["left_ankle"]):
             return
 
-        # Calculate the average angle of both legs
-        average_angle = np.mean([features["right_knee_angle"], features["left_knee_angle"]])
+        # Calculate the average angle of both knees
+        average_torso_angle = np.mean([features["right_knee_angle"], features["left_knee_angle"]])
 
         # Smooth the combined angle
         if self.current_angle:
-            self.current_angle = smooth_angle(self.current_angle, average_angle)
+            self.current_angle = smooth_angle(self.current_angle, average_torso_angle)
         else:
-            self.current_angle = average_angle
+            self.current_angle = average_torso_angle
 
         # Extract the average X-coordinates
         average_hip_x = np.mean([features["right_hip"].x,  features["left_hip"].x])
@@ -274,8 +274,7 @@ class Squats(Exercise):
         average_ankle_x = np.mean([features["right_ankle"].x,  features["left_ankle"].x])
 
         # Check if the hip, knee and ankle are within 5% horizontal distance of each other
-        alignment_threshold = 0.05
-        is_aligned = (np.abs(average_hip_x - average_knee_x) < alignment_threshold and np.abs(average_knee_x - average_ankle_x) < alignment_threshold)
+        is_aligned = self.check_alignment(average_hip_x, average_knee_x) and self.check_alignment(average_knee_x, average_ankle_x)
 
         if self.current_angle < self.threshold_down and self.state == "UP":
             self.state = "DOWN"
@@ -296,10 +295,14 @@ class Squats(Exercise):
 
         return hip.visibility > 0.9 and knee.visibility > 0.9 and ankle.visibility > 0.9
 
+    def check_alignment(self, point_1, point_2, alignment_threshold=0.5):
+        """Checks if two points are aligned within a given threshold."""
+        return np.abs(point_1 - point_2) < alignment_threshold
 
-class SitUps(ABC):
+
+class SitUps(Exercise):
     def __init__(self):
-        super().__init__(name="SitUps", threshold_up=60, threshold_down=130)
+        super().__init__(name="SitUps", threshold_up=35, threshold_down=80)
 
         self._features_needed = {
         "keypoints": {
@@ -312,11 +315,12 @@ class SitUps(ABC):
             "left_knee": 25,
             "left_ankle": 27
         },
-        "angles": ["right_torso_angle", "left_torso_angle"]
+        "angles": ["right_knee_angle", "left_knee_angle", "right_torso_angle", "left_torso_angle"]
         }
 
-        self.current_angle = None
-        self.state = "UP"
+        self.current_knee_angle = None
+        self.current_torso_angle = None
+        self.state = "DOWN"
         self.reps = 0
 
     @property
@@ -333,14 +337,49 @@ class SitUps(ABC):
         and not self.check_keypoint_visibility(features["left_shoulder"], features["left_hip"], features["left_knee"], features["left_ankle"]):
             return
 
+        # Prevent cheating by checking that the shoulder and hip are on the same height in the beginning
+        left_shoulder_height, right_shoulder_height = features["left_shoulder"].y, features["right_shoulder"].y
+        left_hip_height, right_hip_height = features["left_hip"].y, features["right_hip"].y
+
+        is_aligned = self.check_alignment(left_shoulder_height, left_hip_height) and self.check_alignment(right_shoulder_height, right_hip_height)
+
+        # Calculate and smoothen angles
+        average_knee_angle = np.mean([features["right_knee_angle"], features["left_knee_angle"]])
+        average_torso_angle = np.mean([features["right_torso_angle"], features["left_torso_angle"]])
+
+        if self.current_knee_angle:
+            self.current_knee_angle = smooth_angle(self.current_knee_angle, average_knee_angle)
+        else:
+            self.current_knee_angle = average_knee_angle
+
+        if self.current_torso_angle:
+            self.current_torso_angle = smooth_angle(self.current_torso_angle, average_torso_angle)
+        else:
+            self.current_torso_angle = average_torso_angle
+
+        # Ensure knees are bent at all times
+        # valid_knees = 60 <= self.current_knee_angle <= 90
+
+        if self.current_torso_angle < self.threshold_up and self.state == "DOWN":
+            self.state = "UP"
+
+        if self.current_torso_angle > self.threshold_down and self.state == "UP":
+            self.state = "DOWN"
+            self.reps += 1
+
     def check_keypoint_visibility(self, shoulder, hip, knee, ankle):
         """Checks if either the left or rights hip, knee and ankle visibility is over 90%."""
-        print(f"Hip: {hip.visibility}, Knee {knee.visibility}, Ankle {ankle.visibility}")
-
+        # print(f"Hip: {hip.visibility}, Knee {knee.visibility}, Ankle {ankle.visibility}")
         return shoulder.visibility > 0.9 and hip.visibility > 0.9 and knee.visibility > 0.9 and ankle.visibility > 0.9
 
+    def check_alignment(self, point_1, point_2, alignment_threshold=0.5):
+        """Checks if two points are aligned within a given threshold."""
+        return np.abs(point_1 - point_2) < alignment_threshold
 
-
+    def display_count(self):
+        print(f"Torso angle: {self.current_torso_angle}")
+        print(f"Reps: {self.reps}")
+        print(f"State: {self.state}")
 
 class Exercises():
-    exercises = {"pushups": PushUps(), "pullups": PullUps(), "biceps_curls": BicepsCurls(), "squats": Squats()}
+    exercises = {"pushup": PushUps(), "pullup": PullUps(), "biceps_curl": BicepsCurls(), "squat": Squats(), "situp": SitUps()}

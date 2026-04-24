@@ -11,8 +11,8 @@ import cv2
 
 def main():
     print('---------- Running ----------')
-    source_frame = SourceFrame(start_time=int(time.time() * 1000))
-    # source_frame = SourceFrame.from_video("videos/squat.mp4", start_time=int(time.time() * 1000))
+    # source_frame = SourceFrame(start_time=int(time.time() * 1000))
+    source_frame = SourceFrame.from_video("videos/situps.mp4", start_time=int(time.time() * 1000))
 
     print('---------- Received frames ----------')
     pose_estimator = PoseEstimator()
@@ -20,7 +20,8 @@ def main():
     landmarks = None
 
     keys = list(Exercises.exercises.keys())
-    exercise_name = keys[0]
+    # exercise_name = keys[0]
+    exercise_name = "situp"
     current_exercise = Exercises.exercises[exercise_name]
 
     while True:
@@ -35,7 +36,7 @@ def main():
         features = calculate_features(result, current_exercise.features_needed)
         current_exercise.count_reps(features)
 
-        #current_exercise.display_count()
+        current_exercise.display_count()
 
         if result.pose_landmarks:
             landmarks = result.pose_landmarks[0]
