@@ -382,4 +382,4 @@ class SitUps(Exercise):
         print(f"State: {self.state}")
 
 class Exercises():
-    exercises = {"pushup": PushUps(), "pullup": PullUps(), "biceps_curl": BicepsCurls(), "squat": Squats(), "situp": SitUps()}
+    exercises = {"pushup": PushUps(), "pullup": PullUps(), "bicep_curl": BicepsCurls(), "squat": Squats(), "situp": SitUps()}
