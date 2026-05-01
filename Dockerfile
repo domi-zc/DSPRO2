@@ -24,11 +24,12 @@ RUN uv sync --frozen --no-install-project
 
 COPY frontend/ ./frontend/
 COPY src/ ./src/
+COPY mediapipe/ ./mediapipe/
 
 RUN uv sync --frozen
 
 WORKDIR /app/frontend
 
-EXPOSE 8000
+EXPOSE 80
 
-ENTRYPOINT ["uv", "run", "fastapi", "dev", "main.py", "--host", "0.0.0.0"]
+CMD ["uv", "run", "fastapi", "run", "main.py", "--port", "80", "--host", "0.0.0.0"]
