@@ -1,0 +1,5 @@
+13-63-153-20.nip.io,
+13.63.153.20.nip.io,
+the-virtual-coach-0d3f9914.nip.io {
+    reverse_proxy fast-api-app:80
+}
