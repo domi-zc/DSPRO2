@@ -41,6 +41,11 @@ ws.onopen = () => {
     })
     .then(stream => {
         video.srcObject = stream;
+
+        video.setAttribute('playsinline', ''); 
+        video.setAttribute('autoplay', '');
+        video.setAttribute('muted', '');
+        video.muted = true;
         
         video.onloadedmetadata = () => {
             const actualWidth = video.videoWidth;
@@ -51,6 +56,10 @@ ws.onopen = () => {
             
             hiddenCanvas.width = actualWidth;
             hiddenCanvas.height = actualHeight;
+
+            video.play().catch(err => {
+                console.error("Safari blocked video playback:", err);
+            });
         };
 
         video.onplaying = () => {
