@@ -9,7 +9,7 @@
     --main-red-font-color: #B50019;
 }
 html {
-    height: 100%;
+    overflow-x: hidden;
 }
 body {
     font-family: "Manrope", sans-serif;
@@ -17,7 +17,6 @@ body {
     font-weight: 500;
     font-style: normal;
     min-height: 100vh;
-    height: 100%;
     background-color: var(--main-light-bg-color);
     color: var(--main-brown-font-color);
     display: flex;
@@ -25,8 +24,6 @@ body {
     margin: 0;
     flex-wrap: nowrap;
     align-items: center;
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 body > * {
     max-width: 1250px;
