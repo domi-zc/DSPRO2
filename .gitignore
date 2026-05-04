@@ -1,10 +1,4 @@
-# macOS
 .DS_Store
-
-# virtual env
-.python-version
-
-# python
 __pycache__/
-
 videos/
+dataset/

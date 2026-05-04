@@ -1,0 +1,31 @@
+{
+  "workout_name": "Full Body Workout",
+  "difficulty": "medium",
+  "area": "full body",
+  "exercises": [
+    {
+      "name": "Squats",
+      "sets": 3,
+      "reps": 2,
+      "rest_after_seconds": 5
+    },
+    {
+      "name": "Push-ups",
+      "sets": 1,
+      "reps": 3,
+      "rest_after_seconds": 5
+    },
+    {
+      "name": "Pull-ups",
+      "sets": 1,
+      "reps": 1,
+      "rest_after_seconds": 5
+    },
+    {
+      "name": "Squats",
+      "sets": 2,
+      "reps": 1,
+      "rest_after_seconds": 0
+    }
+  ]
+}

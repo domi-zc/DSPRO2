@@ -5,24 +5,24 @@ from smoothing import smooth_angle
 from angle import calculate_angle
 from feature_extraction import calculate_features
 from exercises import Exercises
+from workout import Workout
+
 import time
 import cv2
 
 
 def main():
     print('---------- Running ----------')
-    # source_frame = SourceFrame(start_time=int(time.time() * 1000))
-    source_frame = SourceFrame.from_video("videos/situps.mp4", start_time=int(time.time() * 1000))
+    source_frame = SourceFrame(start_time=int(time.time() * 1000))
+    # source_frame = SourceFrame.from_video("videos/situps.mp4", start_time=int(time.time() * 1000))
 
+    workout = Workout("workouts/test_workout.json")
+
+    print(f"---------- Loaded workout: {workout.workout_name} ----------")
     print('---------- Received frames ----------')
+
     pose_estimator = PoseEstimator()
-
     landmarks = None
-
-    keys = list(Exercises.exercises.keys())
-    # exercise_name = keys[0]
-    exercise_name = "situp"
-    current_exercise = Exercises.exercises[exercise_name]
 
     while True:
         frame_data = source_frame.get_frames()
@@ -33,16 +33,18 @@ def main():
         frame_timestamp, frame = frame_data
         result = pose_estimator.estimate_pose(frame_timestamp, frame)
 
-        features = calculate_features(result, current_exercise.features_needed)
-        current_exercise.count_reps(features)
-
-        current_exercise.display_count()
-
         if result.pose_landmarks:
             landmarks = result.pose_landmarks[0]
-        # Arm keypoints
 
-        exercise_info_specs = {"current_exercise": current_exercise.name, "reps": current_exercise.reps, "state": current_exercise.state}
+        current_exercise = workout.get_current_exercise()
+
+        if current_exercise is not None:
+            features = calculate_features(result, current_exercise.features_needed)
+            workout.update(features)
+        else:
+            workout.update({})
+
+        exercise_info_specs = workout.get_display_info()
         display_video_with_annotations(frame, landmarks, exercise_info_specs)
 
         key = cv2.waitKey(1) & 0xFF
@@ -50,10 +52,10 @@ def main():
             break
 
         if key == ord("s"):
-            idx = keys.index(exercise_name) if exercise_name in keys else -1
-            new_idx = (idx + 1) % len(keys)
-            exercise_name = keys[new_idx]
-            current_exercise = Exercises.exercises[exercise_name]
+            workout.skip()
+
+    cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     main()
