@@ -1,5 +1,5 @@
-16.170.76.65.nip.io,
-16-170-76-65.nip.io,
-the-virtual-coach-10aa4c41.nip.io {
+16.18.78.77.nip.io,
+16-18-78-77-nip.io,
+the-virtual-coach-10124e4d.nip.io {
     reverse_proxy fast-api-app:80
 }
