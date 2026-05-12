@@ -260,13 +260,13 @@ class Squats(Exercise):
             return
 
         # Calculate the average angle of both knees
-        average_torso_angle = np.mean([features["right_knee_angle"], features["left_knee_angle"]])
+        average_knee_angle = np.mean([features["right_knee_angle"], features["left_knee_angle"]])
 
         # Smooth the combined angle
         if self.current_angle:
-            self.current_angle = smooth_angle(self.current_angle, average_torso_angle)
+            self.current_angle = smooth_angle(self.current_angle, average_knee_angle)
         else:
-            self.current_angle = average_torso_angle
+            self.current_angle = average_knee_angle
 
         # Extract the average X-coordinates
         average_hip_x = np.mean([features["right_hip"].x,  features["left_hip"].x])
@@ -358,18 +358,19 @@ class SitUps(Exercise):
             self.current_torso_angle = average_torso_angle
 
         # Ensure knees are bent at all times
-        # valid_knees = 60 <= self.current_knee_angle <= 90
+        valid_knees = 30 <= self.current_knee_angle <= 75
+        print(f"Knee angle: {self.current_knee_angle}")
 
-        if self.current_torso_angle < self.threshold_up and self.state == "DOWN":
+        if self.current_torso_angle < self.threshold_up and self.state == "DOWN" and is_aligned and valid_knees:
             self.state = "UP"
 
-        if self.current_torso_angle > self.threshold_down and self.state == "UP":
+        if self.current_torso_angle > self.threshold_down and self.state == "UP" and valid_knees:
             self.state = "DOWN"
             self.reps += 1
+            print(f"+1 Rep. Total reps: {self.reps}")
 
     def check_keypoint_visibility(self, shoulder, hip, knee, ankle):
         """Checks if either the left or rights hip, knee and ankle visibility is over 90%."""
-        # print(f"Hip: {hip.visibility}, Knee {knee.visibility}, Ankle {ankle.visibility}")
         return shoulder.visibility > 0.9 and hip.visibility > 0.9 and knee.visibility > 0.9 and ankle.visibility > 0.9
 
     def check_alignment(self, point_1, point_2, alignment_threshold=0.5):
