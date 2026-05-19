@@ -1,0 +1,37 @@
+{
+  "workout_name": "Mixed Impossible",
+  "difficulty": "impossible",
+  "area": "Mixed",
+  "exercises": [
+    {
+      "name": "Squats",
+      "sets": 1,
+      "reps": 100,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Push-ups",
+      "sets": 3,
+      "reps": 20,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Pull-ups",
+      "sets": 3,
+      "reps": 10,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Bicep Curls",
+      "sets": 3,
+      "reps": 30,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Situps",
+      "sets": 1,
+      "reps": 80,
+      "rest_after_seconds": 0
+    }
+  ]
+}

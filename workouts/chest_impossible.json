@@ -1,0 +1,13 @@
+{
+  "workout_name": "Chest Impossible",
+  "difficulty": "impossible",
+  "area": "Chest",
+  "exercises": [
+    {
+      "name": "Push-ups",
+      "sets": 5,
+      "reps": 20,
+      "rest_after_seconds": 60
+    }
+  ]
+}

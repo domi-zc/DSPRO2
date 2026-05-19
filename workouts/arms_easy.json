@@ -1,0 +1,19 @@
+{
+  "workout_name": "Arms Easy",
+  "difficulty": "easy",
+  "area": "Arms",
+  "exercises": [
+    {
+      "name": "Bicep Curls",
+      "sets": 1,
+      "reps": 12,
+      "rest_after_seconds": 90
+    },
+    {
+      "name": "Push-ups",
+      "sets": 1,
+      "reps": 5,
+      "rest_after_seconds": 0
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "workout_name": "Mixed Intermediate",
+  "difficulty": "intermediate",
+  "area": "Mixed",
+  "exercises": [
+    {
+      "name": "Squats",
+      "sets": 2,
+      "reps": 15,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Push-ups",
+      "sets": 1,
+      "reps": 10,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Bicep Curls",
+      "sets": 2,
+      "reps": 12,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Situps",
+      "sets": 2,
+      "reps": 15,
+      "rest_after_seconds": 60
+    }
+  ]
+}

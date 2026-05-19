@@ -1,0 +1,31 @@
+{
+  "workout_name": "Arms Impossible",
+  "difficulty": "impossible",
+  "area": "Arms",
+  "exercises": [
+    {
+      "name": "Push-ups",
+      "sets": 3,
+      "reps": 20,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Bicep Curls",
+      "sets": 3,
+      "reps": 20,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Push-ups",
+      "sets": 2,
+      "reps": 20,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Bicep Curls",
+      "sets": 2,
+      "reps": 20,
+      "rest_after_seconds": 60
+    }
+  ]
+}

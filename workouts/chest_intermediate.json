@@ -1,0 +1,13 @@
+{
+  "workout_name": "Chest Intermediate",
+  "difficulty": "intermediate",
+  "area": "Chest",
+  "exercises": [
+    {
+      "name": "Push-ups",
+      "sets": 2,
+      "reps": 10,
+      "rest_after_seconds": 60
+    }
+  ]
+}

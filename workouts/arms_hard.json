@@ -1,0 +1,19 @@
+{
+  "workout_name": "Arms Hard",
+  "difficulty": "hard",
+  "area": "Arms",
+  "exercises": [
+    {
+      "name": "Bicep Curls",
+      "sets": 3,
+      "reps": 15,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Push-ups",
+      "sets": 2,
+      "reps": 20,
+      "rest_after_seconds": 60
+    }
+  ]
+}

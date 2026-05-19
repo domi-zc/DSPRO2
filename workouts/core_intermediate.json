@@ -1,0 +1,13 @@
+{
+  "workout_name": "Core Intermediate",
+  "difficulty": "intermediate",
+  "area": "Core",
+  "exercises": [
+    {
+      "name": "Situps",
+      "sets": 3,
+      "reps": 15,
+      "rest_after_seconds": 60
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "workout_name": "Arms Intermediate",
+  "difficulty": "intermediate",
+  "area": "Arms",
+  "exercises": [
+    {
+      "name": "Bicep Curls",
+      "sets": 2,
+      "reps": 12,
+      "rest_after_seconds": 60
+    },
+    {
+      "name": "Push-ups",
+      "sets": 1,
+      "reps": 10,
+      "rest_after_seconds": 0
+    }
+  ]
+}

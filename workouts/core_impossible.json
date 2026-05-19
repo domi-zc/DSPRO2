@@ -1,0 +1,13 @@
+{
+  "workout_name": "Core Impossible",
+  "difficulty": "impossible",
+  "area": "Core",
+  "exercises": [
+    {
+      "name": "Situps",
+      "sets": 3,
+      "reps": 50,
+      "rest_after_seconds": 0
+    }
+  ]
+}

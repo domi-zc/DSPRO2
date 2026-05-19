@@ -1,0 +1,13 @@
+{
+  "workout_name": "Back Intermediate",
+  "difficulty": "intermediate",
+  "area": "Back",
+  "exercises": [
+    {
+      "name": "Pull-ups",
+      "sets": 2,
+      "reps": 3,
+      "rest_after_seconds": 60
+    }
+  ]
+}

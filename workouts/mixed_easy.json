@@ -1,0 +1,25 @@
+{
+  "workout_name": "Mixed Easy",
+  "difficulty": "easy",
+  "area": "Mixed",
+  "exercises": [
+    {
+      "name": "Squats",
+      "sets": 1,
+      "reps": 15,
+      "rest_after_seconds": 90
+    },
+    {
+      "name": "Bicep Curls",
+      "sets": 1,
+      "reps": 12,
+      "rest_after_seconds": 90
+    },
+    {
+      "name": "Situps",
+      "sets": 1,
+      "reps": 10,
+      "rest_after_seconds": 0
+    }
+  ]
+}

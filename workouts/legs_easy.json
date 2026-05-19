@@ -1,0 +1,13 @@
+{
+  "workout_name": "Legs Easy",
+  "difficulty": "easy",
+  "area": "Legs",
+  "exercises": [
+    {
+      "name": "Squats",
+      "sets": 2,
+      "reps": 15,
+      "rest_after_seconds": 90
+    }
+  ]
+}
