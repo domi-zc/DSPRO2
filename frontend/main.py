@@ -176,7 +176,11 @@ async def websocket_workout_endpoint(websocket: WebSocket, workout_id: str):
             
             # Process exercise state and skeletal connections
             if current_exercise is not None:
-                mapped_name = WORKOUT_NAME_MAP.get(current_exercise.name, "")
+                ex_name_lower = current_exercise.name.lower()
+                
+                safe_map = {k.lower(): v for k, v in WORKOUT_NAME_MAP.items()}
+                
+                mapped_name = safe_map.get(ex_name_lower, "")
                 connections = EXERCISE_CONNECTIONS.get(mapped_name, [])
                 
                 features = calculate_features(result, current_exercise.features_needed)
