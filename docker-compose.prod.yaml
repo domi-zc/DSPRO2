@@ -1,20 +1,18 @@
 services:
   fast-api-app:
     build: .
-    expose:
-      - "80"
-    container_name: dspro2-fast-api
-    restart: unless-stopped
+    restart: always
 
   caddy:
-    image: caddy:2-alpine
-    container_name: caddy-server
-    restart: unless-stopped
+    image: caddy:latest
+    restart: always
     ports:
       - "80:80" # HTTP
       - "443:443" # HTTPS
+    environment:
+      - DOMAIN=${DOMAIN}
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     depends_on:

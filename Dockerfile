@@ -1,35 +1,24 @@
-FROM python:3.11.11
+FROM python:3.11.11-slim
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+# Prevent Python from writing .pyc files and buffering logs
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+ENV UV_PROJECT_ENVIRONMENT="/usr/local"
+
+RUN apt-get update && apt-get install -y \
+    libgl1 \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    software-properties-common \
-    git \
-    libgl1 \
-    libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-ENV UV_COMPILE_BYTECODE=1
-ENV UV_LINK_MODE=copy
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-install-project
 
-COPY frontend/ ./frontend/
-COPY src/ ./src/
-COPY mediapipe/ ./mediapipe/
+RUN uv sync --frozen --no-dev
 
-RUN uv sync --frozen
+COPY . .
 
-WORKDIR /app/frontend
-
-EXPOSE 80
-
-CMD ["uv", "run", "fastapi", "run", "main.py", "--port", "80", "--host", "0.0.0.0"]
+CMD ["fastapi", "run", "frontend/main.py", "--port", "8000"]

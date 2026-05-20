@@ -2,8 +2,9 @@ services:
   fast-api-app:
     build: .
     ports:
-      - "80:80"
+      - "80:8000"
     volumes:
-      - ./:/app
-    container_name: dspro2-fast-api
-    restart: unless-stopped
+      - .:/app
+    environment:
+      - ENVIRONMENT=development
+    command: ["fastapi", "dev", "frontend/main.py", "--host", "0.0.0.0", "--port", "8000"]
