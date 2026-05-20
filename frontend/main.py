@@ -189,12 +189,22 @@ async def websocket_workout_endpoint(websocket: WebSocket, workout_id: str):
                 workout.update({}) # Handles resting or finished states
 
             raw_stats = workout.get_display_info()
-
+            
             pose_state = None
+            reps_left = None
+            reps_right = None
+            state_left = None
+            state_right = None
+
             if current_exercise is not None:
                 pose_state = getattr(current_exercise, 'state', getattr(current_exercise, 'state_right', None))
+                
+                if hasattr(current_exercise, 'reps_left'):
+                    reps_left = current_exercise.reps_left
+                    reps_right = current_exercise.reps_right
+                    state_left = current_exercise.state_left
+                    state_right = current_exercise.state_right
 
-            # Dynamically build the upcoming exercise queue
             up_next = []
             if not workout.finished:
                 current_index = workout.current_step_index
@@ -217,7 +227,15 @@ async def websocket_workout_endpoint(websocket: WebSocket, workout_id: str):
                         "set": f"Set {next_step['set_number']}/{next_step['total_sets']}"
                     })
             
-            stats = {**raw_stats, "up_next": up_next, "pose_state": pose_state}
+            stats = {
+                **raw_stats, 
+                "up_next": up_next, 
+                "pose_state": pose_state,
+                "reps_left": reps_left,
+                "reps_right": reps_right,
+                "state_left": state_left,
+                "state_right": state_right
+            }
 
             response_data = {
                 "stats": stats,

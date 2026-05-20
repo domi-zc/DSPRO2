@@ -6,6 +6,8 @@ const exDisplay = document.getElementById('current-exercise-display');
 const repsDisplay = document.getElementById('current-reps-display');
 const upNextList = document.getElementById('up-next-list');
 const repsContainer = document.querySelector('.tvc-reps-counter-left');
+let repsContainer2 = document.querySelector('.tvc-reps-counter-right');
+let repsSpan2 = repsContainer2 ? repsContainer2.querySelector('p') : null;
 
 // Hidden canvas for capturing frame blobs to send to the backend
 const hiddenCanvas = document.createElement('canvas');
@@ -54,15 +56,54 @@ ws.onmessage = (event) => {
         if (data.stats.state === "DONE") {
             repsDisplay.innerText = "DONE";
             if (repsContainer) repsContainer.classList.remove('tvc-up', 'tvc-down');
+            if (repsContainer2) repsContainer2.style.display = 'none';
         } else {
-            repsDisplay.innerText = data.stats.reps || "-";
-            
-            const displayState = data.stats.pose_state; 
-            if (displayState && repsContainer) {
-                repsContainer.classList.remove('tvc-up', 'tvc-down');
-                const stateLower = displayState.toLowerCase();
-                if (stateLower === 'up') repsContainer.classList.add('tvc-up');
-                else if (stateLower === 'down') repsContainer.classList.add('tvc-down');
+            if (data.stats.reps_left !== null && data.stats.reps_left !== undefined) {
+                if (!repsContainer2 && repsContainer) {
+                    repsContainer2 = repsContainer.cloneNode(true);
+                    repsContainer2.classList.remove('tvc-reps-counter-left');
+                    repsContainer2.classList.add('tvc-reps-counter-right');
+                    repsContainer.parentNode.appendChild(repsContainer2);
+                    repsSpan2 = repsContainer2.querySelector('p');
+                    repsSpan2.id = "current-reps-display-right";
+                }
+                
+                if (repsContainer2) repsContainer2.style.display = '';
+
+                let target = "";
+                if (data.stats.reps && String(data.stats.reps).includes("/")) {
+                    target = "/" + String(data.stats.reps).split("/")[1].trim();
+                }
+                
+                repsDisplay.innerText = "L" + data.stats.reps_left + target;
+                if (repsSpan2) repsSpan2.innerText = "R" + data.stats.reps_right + target;
+                
+                const stateLeft = data.stats.state_left;
+                if (stateLeft && repsContainer) {
+                    repsContainer.classList.remove('tvc-up', 'tvc-down');
+                    const stateLowerLeft = stateLeft.toLowerCase();
+                    if (stateLowerLeft === 'up') repsContainer.classList.add('tvc-up');
+                    else if (stateLowerLeft === 'down') repsContainer.classList.add('tvc-down');
+                }
+                
+                const stateRight = data.stats.state_right;
+                if (stateRight && repsContainer2) {
+                    repsContainer2.classList.remove('tvc-up', 'tvc-down');
+                    const stateLowerRight = stateRight.toLowerCase();
+                    if (stateLowerRight === 'up') repsContainer2.classList.add('tvc-up');
+                    else if (stateLowerRight === 'down') repsContainer2.classList.add('tvc-down');
+                }
+            } else {
+                if (repsContainer2) repsContainer2.style.display = 'none';
+                repsDisplay.innerText = data.stats.reps || "-";
+                
+                const displayState = data.stats.pose_state; 
+                if (displayState && repsContainer) {
+                    repsContainer.classList.remove('tvc-up', 'tvc-down');
+                    const stateLower = displayState.toLowerCase();
+                    if (stateLower === 'up') repsContainer.classList.add('tvc-up');
+                    else if (stateLower === 'down') repsContainer.classList.add('tvc-down');
+                }
             }
         }
         
