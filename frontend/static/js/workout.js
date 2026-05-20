@@ -5,6 +5,7 @@ const ctx = outputCanvas.getContext('2d');
 const exDisplay = document.getElementById('current-exercise-display');
 const repsDisplay = document.getElementById('current-reps-display');
 const upNextList = document.getElementById('up-next-list');
+const repsContainer = document.querySelector('.tvc-reps-counter-left');
 
 // Hidden canvas for capturing frame blobs to send to the backend
 const hiddenCanvas = document.createElement('canvas');

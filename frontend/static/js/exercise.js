@@ -2,9 +2,9 @@ const video = document.querySelector('.tvc-camera-container-video video');
 const outputCanvas = document.querySelector('.tvc-camera-container-video canvas');
 const ctx = outputCanvas.getContext('2d');
 
-const repsContainer = document.querySelector('.tvc-reps-counter-l');
+const repsContainer = document.querySelector('.tvc-reps-counter-left');
 const repsSpan = repsContainer.querySelector('p');
-const repsContainer2 = document.querySelector('.tvc-reps-counter-r');
+const repsContainer2 = document.querySelector('.tvc-reps-counter-right');
 const repsSpan2 = repsContainer2 ? repsContainer2.querySelector('p') : null;
 
 // Hidden canvas for capturing frame blobs to send to the backend
