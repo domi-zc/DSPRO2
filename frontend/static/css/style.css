@@ -475,6 +475,7 @@ a {
 }
 .tvc-workout-container.active .tvc-camera-container .tvc-camera-container-video canvas,
 .tvc-exercise-container.active .tvc-camera-container .tvc-camera-container-video canvas {
+    background-image: url('../img/webcam-background-gray.png');
     object-fit: contain;
 }
 .tvc-camera-container .tvc-camera-container-no-cam {
@@ -751,6 +752,9 @@ a {
     .tvc-camera-container .tvc-camera-container-stats {
         height: 100%;
         width: 100%;
+    }
+    .tvc-camera-container .tvc-camera-container-stats .tvc-camera-container-stats-icon {
+        display: none;
     }
 }
 @media screen and (max-width: 600px) {
