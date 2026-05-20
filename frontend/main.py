@@ -215,7 +215,7 @@ async def websocket_workout_endpoint(websocket: WebSocket, workout_id: str):
                     if upcoming_idx < len(workout.steps):
                         raw_stats["current_exercise"] = f"Rest"
                     
-                    start_idx = upcoming_idx + 1
+                    start_idx = upcoming_idx
                 else:
                     start_idx = current_index + 1
                 
