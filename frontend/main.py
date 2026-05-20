@@ -73,10 +73,13 @@ async def training(request: Request):
                     print(f"Error loading {file_name}: {e}")
 
     # Parse available individual exercises
-    available_exercises = {
+    workouts.sort(key=lambda x: x.get("area", "").lower())
+
+    raw_exercises = {
         key: key.replace("_", " ").title() 
         for key in Exercises.exercises.keys()
     }
+    available_exercises = dict(sorted(raw_exercises.items(), key=lambda item: item[1]))
         
     return templates.TemplateResponse(
         request=request, 
@@ -93,10 +96,11 @@ async def exercise_page(request: Request, exercise_id: str):
     """
     Renders the UI for a single infinite-rep exercise.
     """
-    available_exercises = {
+    raw_exercises = {
         key: key.replace("_", " ").title() 
         for key in Exercises.exercises.keys()
     }
+    available_exercises = dict(sorted(raw_exercises.items(), key=lambda item: item[1]))
     
     # Fallback if invalid ID is passed
     if exercise_id not in Exercises.exercises:
@@ -185,7 +189,17 @@ async def websocket_workout_endpoint(websocket: WebSocket, workout_id: str):
             # Dynamically build the upcoming exercise queue
             up_next = []
             if not workout.finished:
-                start_idx = workout.current_step_index + 1
+                current_index = workout.current_step_index
+                
+                if workout.is_resting():
+                    upcoming_idx = current_index + 1
+                    
+                    if upcoming_idx < len(workout.steps):
+                        raw_stats["current_exercise"] = f"Rest"
+                    
+                    start_idx = upcoming_idx + 1
+                else:
+                    start_idx = current_index + 1
                 
                 for i in range(start_idx, min(start_idx + 3, len(workout.steps))):
                     next_step = workout.steps[i]
@@ -206,7 +220,13 @@ async def websocket_workout_endpoint(websocket: WebSocket, workout_id: str):
             # Map the precise body landmarks required for this exercise
             if result.pose_landmarks and current_exercise is not None:
                 lms = result.pose_landmarks[0]
-                needed_keypoints = current_exercise.features_needed["keypoints"].values()
+                
+                needed_keypoints = set(current_exercise.features_needed["keypoints"].values())
+                
+                for start_idx, end_idx in connections:
+                    needed_keypoints.add(start_idx)
+                    needed_keypoints.add(end_idx)
+                
                 for idx in needed_keypoints:
                     response_data["landmarks"][str(idx)] = {
                         "x": lms[idx].x, 
@@ -282,7 +302,12 @@ async def websocket_endpoint(websocket: WebSocket, exercise_id: str):
 
             if result.pose_landmarks:
                 lms = result.pose_landmarks[0]
-                needed_keypoints = current_exercise.features_needed["keypoints"].values()
+                
+                needed_keypoints = set(current_exercise.features_needed["keypoints"].values())
+                for start_idx, end_idx in connections:
+                    needed_keypoints.add(start_idx)
+                    needed_keypoints.add(end_idx)
+                
                 for idx in needed_keypoints:
                     response_data["landmarks"][str(idx)] = {
                         "x": lms[idx].x, 

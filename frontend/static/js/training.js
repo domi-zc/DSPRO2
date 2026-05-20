@@ -7,23 +7,6 @@ const diffControlWrapper = document.querySelector('.tvc-training-workout-diff');
 const workoutCards = document.querySelectorAll('.tvc-training-workout-grid .tvc-training-grid-card');
 
 /**
- * Sorts workout cards alphabetically based on the target muscle area (h3 text)
- * and dynamically re-appends them to the DOM.
- */
-function sortWorkoutsByArea() {
-    const cards = Array.from(workoutCards);
-    cards.sort((a, b) => {
-        const areaA = a.querySelector('h3').innerText.trim().toLowerCase();
-        const areaB = b.querySelector('h3').innerText.trim().toLowerCase();
-        return areaA.localeCompare(areaB);
-    });
-    
-    cards.forEach(card => {
-        workoutGrid.appendChild(card);
-    });
-}
-
-/**
  * Toggles visibility of grids and workout cards based on the currently selected 
  * mode (Workout vs Exercise) and difficulty toggles.
  */
@@ -81,6 +64,5 @@ modeRadios.forEach(radio => radio.addEventListener('change', () => { updateView(
 diffRadios.forEach(radio => radio.addEventListener('change', () => { updateView(); updateHash(); }));
 window.addEventListener('hashchange', () => { parseHash(); updateView(); });
 
-sortWorkoutsByArea();
 parseHash();
 updateView();
