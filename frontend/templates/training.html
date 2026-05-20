@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	<title>The Virtual Coach - Training</title>
+{% endblock %}
+
+{% block content %}
+<div class="tvc-training-container">
+    <h2>Training</h2>
+
+    <div class="tvc-training-segmented-control tvc-training-mode">
+        <input type="radio" id="mode-workout" name="training_mode" value="workouts" class="tvc-mode-radio tvc-radio-workouts" checked>
+        <input type="radio" id="mode-exercise" name="training_mode" value="exercises" class="tvc-mode-radio tvc-radio-exercises">
+
+        <label for="mode-workout" class="tvc-label-workouts" data-cursor="-inverse -text">Workout</label>
+        <label for="mode-exercise" class="tvc-label-exercises" data-cursor="-inverse -text">Exercise</label>
+
+        <div class="tvc-slider"></div>
+    </div>
+
+    <div class="tvc-training-segmented-control tvc-training-workout-diff">
+        <input type="radio" id="diff-easy" name="workout_difficulty" value="easy" class="tvc-diff-radio tvc-radio-easy" checked>
+        <input type="radio" id="diff-intermediate" name="workout_difficulty" value="intermediate" class="tvc-diff-radio tvc-radio-intermediate">
+        <input type="radio" id="diff-hard" name="workout_difficulty" value="hard" class="tvc-diff-radio tvc-radio-hard">
+        <input type="radio" id="diff-impossible" name="workout_difficulty" value="impossible" class="tvc-diff-radio tvc-radio-impossible">
+
+        <label for="diff-easy" class="tvc-label-easy" data-cursor="-inverse -text">Easy</label>
+        <label for="diff-intermediate" class="tvc-label-intermediate" data-cursor="-inverse -text">Intermediate</label>
+        <label for="diff-hard" class="tvc-label-hard" data-cursor="-inverse -text">Hard</label>
+        <label for="diff-impossible" class="tvc-label-impossible" data-cursor="-inverse -text">Impossible</label>
+
+        <div class="tvc-slider"></div>
+    </div>
+
+    <div class="tvc-training-grid tvc-training-workout-grid">
+        {% for workout in workouts %}
+        <div class="tvc-training-grid-card" data-difficulty="{{ workout.difficulty | lower }}">
+            <a href="/workout/{{ workout.id }}" data-tilt data-tilt-max="5" data-tilt-speed="1000" data-tilt-perspective="2000" data-tilt-scale="1.02">
+                <h3 data-cursor="-inverse -text">{{ workout.area }}</h3>
+                <div class="tvc-training-grid-card-details">
+                    {% for ex in workout.exercises %}
+                        <p data-cursor="-inverse -text">{{ ex.name }}: {{ ex.sets }} Sets x {{ ex.reps }} Reps</p>
+                    {% endfor %}
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="tvc-training-grid tvc-training-exercise-grid">
+        {% for key, name in exercises.items() %}
+        <div class="tvc-training-grid-card">
+            <a href="/exercise/{{ key }}" class="tvc-card" data-tilt data-tilt-max="5" data-tilt-speed="1000" data-tilt-perspective="2000" data-tilt-scale="1.02">
+                <h3 data-cursor="-inverse -text">{{ name }}</h3>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/training.js"></script>
+<script src="/static/js/vanilla-tilt.min.js"></script>
+{% endblock %}
