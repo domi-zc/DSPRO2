@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
 {% block title %}
-	<title>The Virtual Coach - Webcam</title>
+	<title>The Virtual Coach - {{ exercise_name }}</title>
 {% endblock %}
 
 {% block content %}
-    <div class="tvc-wc">
-        <div class="tvc-wc-video">
+<div class="tvc-exercise-container">
+    <div class="tvc-camera-container">
+        <div class="tvc-camera-container-video">
             <video autoplay playsinline muted></video>
             <canvas width="1280" height="720"></canvas>
         </div>
-        <div class="tvc-wc-stats">
+        <div class="tvc-camera-container-stats">
             <div>
                 <p>Current Excercise</p>
                 <h2 data-cursor="-inverse -text">{{ exercise_name }}</h2>
@@ -50,8 +51,8 @@
             </div>
             <div>
                 <p>Change Excercise</p>
-                <div class="tvc-wc-stats-select">
-                    <select onchange="window.location.href='/webcam?exercise=' + this.value" data-cursor="-inverse -text">
+                <div class="tvc-camera-container-stats-select">
+                    <select onchange="window.location.href='/exercise/' + this.value" data-cursor="-inverse -text">
                         {% for key, name in available_exercises.items() %}
                             <option value="{{ key }}" {% if exercise_id == key %}selected{% endif %}>   
                                 {{ name }}
@@ -63,7 +64,7 @@
                     </svg>
                 </div>
             </div>
-            <div class="tvc-wc-stats-icon">
+            <div class="tvc-camera-container-stats-icon">
                 <svg data-cursor="-inverse -text" data-cursor-stick viewBox="0 0 24 24">
                     <path d="M21.44,2.62s0,0,0,0l0,0A2,2,0,0,0,20,2H14a1,1,0,0,0,0,2h4.59l-5.3,5.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L20,5.41V10a1,1,0,0,0,2,0V4A2,2,0,0,0,21.44,2.62Z"></path>
                     <path d="M10.71,14.71,5.41,20H10a1,1,0,0,1,0,2H4a2,2,0,0,1-1.38-.56l0,0s0,0,0,0A2,2,0,0,1,2,20V14a1,1,0,0,1,2,0v4.59l5.29-5.3a1,1,0,0,1,1.42,1.42Z"></path>
@@ -71,11 +72,25 @@
             </div>
        </div>
     </div>
+
+    <div class="tvc-exercise-actions">
+        <a href="/training#exercise" class="tvc-back-link" data-cursor="-inverse -text">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 8 8 12 12 16"></polyline>
+                <line x1="16" y1="12" x2="8" y2="12"></line>
+            </svg>
+            <p>
+                Switch Mode
+            </p>
+        </a>
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}
     <script>
         const currentExerciseId = "{{ exercise_id }}";
     </script>
-	<script src="/static/js/webcam.js"></script>
+	<script src="/static/js/exercise.js"></script>
 {% endblock %}

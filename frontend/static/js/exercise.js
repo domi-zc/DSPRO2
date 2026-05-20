@@ -1,79 +1,72 @@
-const video = document.querySelector('.tvc-wc-video video');
-const outputCanvas = document.querySelector('.tvc-wc-video canvas');
+const video = document.querySelector('.tvc-camera-container-video video');
+const outputCanvas = document.querySelector('.tvc-camera-container-video canvas');
 const ctx = outputCanvas.getContext('2d');
 
 const repsContainer = document.querySelector('.tvc-reps-counter-l');
 const repsSpan = repsContainer.querySelector('p');
-
 const repsContainer2 = document.querySelector('.tvc-reps-counter-r');
 const repsSpan2 = repsContainer2 ? repsContainer2.querySelector('p') : null;
 
+// Hidden canvas for capturing frame blobs to send to the backend
 const hiddenCanvas = document.createElement('canvas');
 hiddenCanvas.width = 1280;
 hiddenCanvas.height = 720;
 const hiddenCtx = hiddenCanvas.getContext('2d');
 
+// WebSocket & Camera Configuration
 const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-const ws = new WebSocket(`${protocol}//${window.location.host}/ws/video/${currentExerciseId}`);
-
+const ws = new WebSocket(`${protocol}//${window.location.host}/ws/exercise/${currentExerciseId}`);
 ws.binaryType = "blob";
 
+/**
+ * Captures the current video frame, draws it to the hidden canvas, 
+ * compresses it to JPEG, and sends it to the backend via WebSockets.
+ */
 function sendFrame() {
     if (ws.readyState === WebSocket.OPEN && video.readyState === video.HAVE_ENOUGH_DATA) {
         hiddenCtx.drawImage(video, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
         
         hiddenCanvas.toBlob((blob) => {
-            if (blob) {
-                ws.send(blob);
-            }
+            if (blob) ws.send(blob);
         }, 'image/jpeg', 0.7);
     }
 }
 
 ws.onopen = () => {
-    console.log("Verbunden. Starte Kamera...");
+    console.log("Connected. Initializing camera...");
     
     navigator.mediaDevices.getUserMedia({ 
-        video: { 
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-        } 
+        video: { width: { ideal: 1280 }, height: { ideal: 720 } } 
     })
     .then(stream => {
         video.srcObject = stream;
-
         video.setAttribute('playsinline', ''); 
         video.setAttribute('autoplay', '');
         video.setAttribute('muted', '');
         video.muted = true;
         
         video.onloadedmetadata = () => {
-            const actualWidth = video.videoWidth;
-            const actualHeight = video.videoHeight;
-            
-            outputCanvas.width = actualWidth;
-            outputCanvas.height = actualHeight;
-            
-            hiddenCanvas.width = actualWidth;
-            hiddenCanvas.height = actualHeight;
+            outputCanvas.width = video.videoWidth;
+            outputCanvas.height = video.videoHeight;
+            hiddenCanvas.width = video.videoWidth;
+            hiddenCanvas.height = video.videoHeight;
 
-            video.play().catch(err => {
-                console.error("Safari blocked video playback:", err);
-            });
+            video.play().catch(err => console.error("Safari blocked video playback:", err));
         };
 
-        video.onplaying = () => {
-            sendFrame();
-        };
+        video.onplaying = sendFrame;
     })
-    .catch(err => console.error("Kamera-Fehler:", err));
+    .catch(err => console.error("Camera access error:", err));
 };
 
+// UI Updates & Pose Rendering
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
+    // Update Live Reps and State UI
     if (data.stats && repsContainer && repsSpan) {
-
+        
+        // Standard single-counter exercises
         if (data.stats["Reps"] !== undefined) {
             if (repsContainer2) repsContainer2.style.display = 'none';
 
@@ -87,6 +80,7 @@ ws.onmessage = (event) => {
                 else if (stateLower === 'down') repsContainer.classList.add('tvc-down');
             }
 
+        // Dual-counter exercises (e.g., individual arms/legs)
         } else if (data.stats["Reps (Rechts)"] !== undefined) {
             if (repsContainer2) repsContainer2.style.display = '';
 
@@ -111,8 +105,10 @@ ws.onmessage = (event) => {
         }
     }
 
+    // Paint the camera feed to the visible canvas
     ctx.drawImage(hiddenCanvas, 0, 0, outputCanvas.width, outputCanvas.height);
 
+    // Render pose skeletons over the live feed
     if (Object.keys(data.landmarks).length > 0) {
         const width = outputCanvas.width;
         const height = outputCanvas.height;
@@ -122,6 +118,7 @@ ws.onmessage = (event) => {
         ctx.lineWidth = 4;
         ctx.fillStyle = "#B50019";
 
+        // Draw connecting lines
         data.connections.forEach(([startIdx, endIdx]) => {
             const start = lms[startIdx];
             const end = lms[endIdx];
@@ -133,6 +130,7 @@ ws.onmessage = (event) => {
             }
         });
 
+        // Draw joint nodes
         Object.values(lms).forEach(lm => {
             if (lm) {
                 ctx.beginPath();
@@ -142,7 +140,6 @@ ws.onmessage = (event) => {
         });
     }
 
-    requestAnimationFrame(() => {
-        sendFrame();
-    });
+    // Request the next frame loop
+    requestAnimationFrame(sendFrame);
 };
