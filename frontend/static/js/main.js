@@ -1,23 +1,17 @@
+// Initialize custom cursor on desktop screens only
 if (window.innerWidth > 992) {
     const cursor = new MouseFollower({
         skewing: 4,
     });
 }
 
-document.querySelector('.tvc-menu-burger').addEventListener('click', function() {
-    this.classList.toggle('active');
-    document.querySelector('.tvc-navigation-overlay').classList.toggle('active');
-});
-
-
+// Wrap navigation text characters in spans to enable staggered hover animations
 const links = document.querySelectorAll(".tvc-navigation-row a");
 links.forEach((item) => {
-    const navigationsText = item.text.trim()
+    const navigationsText = item.text.trim();
     
     const wrappedText = navigationsText.split('').map((char) => {
-        if (char === ' ') {
-            return ' ';
-        }
+        if (char === ' ') return ' ';
         return `<span data-cursor-stick>${char}</span>`;
     }).join('');
 
@@ -25,6 +19,13 @@ links.forEach((item) => {
 });
 
 
-document.querySelector('.tvc-wc-stats-icon svg').addEventListener('click', function() {
-    document.querySelector('.tvc-wc').classList.toggle('active');
+// Toggle mobile navigation menu overlay
+document.querySelector('.tvc-menu-burger').addEventListener('click', function() {
+    this.classList.toggle('active');
+    document.querySelector('.tvc-navigation-overlay').classList.toggle('active');
+});
+
+// Toggle fullscreen/active mode for camera containers
+document.querySelector('.tvc-camera-container-stats-icon svg').addEventListener('click', function() {
+    document.querySelector('.tvc-exercise-container, .tvc-workout-container').classList.toggle('active');
 });
