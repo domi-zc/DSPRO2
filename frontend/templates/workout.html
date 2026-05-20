@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	<title>The Virtual Coach - {{ workout.workout_name }}</title>
+{% endblock %}
+
+{% block content %}
+<div class="tvc-exercise-container">
+    <div class="tvc-camera-container">
+        <div class="tvc-camera-container-video">
+            <video autoplay playsinline muted></video>
+            <canvas width="1280" height="720"></canvas>
+        </div>
+        <div class="tvc-camera-container-stats">
+            <div>
+                <p>{{ workout.workout_name }}</p>
+                <h2 id="current-exercise-display" data-cursor="-inverse -text">-</h2>
+            </div>
+            <div>
+                <p id="current-state-display">Total Reps</p>
+                <div class="tvc-reps-counter tvc-reps-counter-l">
+                    <p id="current-reps-display" data-cursor="-inverse -text">-</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 15 12" xml:space="preserve">
+                        <g>
+                            <g>
+                                <polyline points="1.5, 4.5 4.5, 1.5 7.5, 4.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                                <line x1="4.5" y1="1.5" x2="4.5" y2="10.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                            </g>
+                            <g>
+                                <polyline points="7.5, 7.5 10.5, 10.5 13.5, 7.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                                <line x1="10.5" y1="10.5" x2="10.5" y2="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+            <div>
+                <p>Up Next</p>
+                <div class="tvc-workout-list" id="up-next-list">
+                </div>
+            </div>
+            <div class="tvc-camera-container-stats-icon">
+                <svg data-cursor="-inverse -text" data-cursor-stick viewBox="0 0 24 24">
+                    <path d="M21.44,2.62s0,0,0,0l0,0A2,2,0,0,0,20,2H14a1,1,0,0,0,0,2h4.59l-5.3,5.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L20,5.41V10a1,1,0,0,0,2,0V4A2,2,0,0,0,21.44,2.62Z"></path>
+                    <path d="M10.71,14.71,5.41,20H10a1,1,0,0,1,0,2H4a2,2,0,0,1-1.38-.56l0,0s0,0,0,0A2,2,0,0,1,2,20V14a1,1,0,0,1,2,0v4.59l5.29-5.3a1,1,0,0,1,1.42,1.42Z"></path>
+                </svg>
+            </div>
+       </div>
+    </div>
+
+    <div class="tvc-exercise-actions">
+        <a href="/training#workout-{{ workout.difficulty | lower }}" class="tvc-back-link" data-cursor="-inverse -text">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 8 8 12 12 16"></polyline>
+                <line x1="16" y1="12" x2="8" y2="12"></line>
+            </svg>
+            <p>Switch Mode</p>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        const currentWorkoutId = "{{ workout_id }}";
+    </script>
+	<script src="/static/js/workout.js"></script>
+{% endblock %}
