@@ -190,6 +190,10 @@ async def websocket_workout_endpoint(websocket: WebSocket, workout_id: str):
 
             raw_stats = workout.get_display_info()
 
+            pose_state = None
+            if current_exercise is not None:
+                pose_state = getattr(current_exercise, 'state', getattr(current_exercise, 'state_right', None))
+
             # Dynamically build the upcoming exercise queue
             up_next = []
             if not workout.finished:
@@ -213,7 +217,7 @@ async def websocket_workout_endpoint(websocket: WebSocket, workout_id: str):
                         "set": f"Set {next_step['set_number']}/{next_step['total_sets']}"
                     })
             
-            stats = {**raw_stats, "up_next": up_next}
+            stats = {**raw_stats, "up_next": up_next, "pose_state": pose_state}
 
             response_data = {
                 "stats": stats,

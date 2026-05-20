@@ -53,11 +53,19 @@ ws.onmessage = (event) => {
         
         if (data.stats.state === "DONE") {
             repsDisplay.innerText = "DONE";
+            if (repsContainer) repsContainer.classList.remove('tvc-up', 'tvc-down');
         } else {
             repsDisplay.innerText = data.stats.reps || "-";
+            
+            const displayState = data.stats.pose_state; 
+            if (displayState && repsContainer) {
+                repsContainer.classList.remove('tvc-up', 'tvc-down');
+                const stateLower = displayState.toLowerCase();
+                if (stateLower === 'up') repsContainer.classList.add('tvc-up');
+                else if (stateLower === 'down') repsContainer.classList.add('tvc-down');
+            }
         }
         
-        // Dynamically build and render the "Up Next" queue
         if (data.stats.up_next && upNextList) {
             upNextList.innerHTML = ''; 
             
