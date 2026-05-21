@@ -613,7 +613,7 @@ a {
 }
 .tvc-exercise-actions a {
     align-items: center;
-    display: flex;
+    display: inline-flex;
 }
 .tvc-exercise-actions p {
     color: var(--main-heading-color);
