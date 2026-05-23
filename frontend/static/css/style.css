@@ -306,6 +306,7 @@ a {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
+    justify-content: center;
 }
 .tvc-training-grid-card {
     box-sizing: border-box;
