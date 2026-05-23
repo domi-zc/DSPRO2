@@ -234,29 +234,16 @@ a {
 }
 .tvc-lp-btn-container {
     display: flex;
-    flex-direction: row;
-    gap: 40px;
-    justify-content: space-evenly;
+    justify-content: center;
     padding-top: 20px;
-    width: 80%;
 }
 .tvc-btn {
-    font-size: 17px;
-    padding: 12px 24px;
-    text-transform: uppercase;
-}
-.tvc-btn-icon-text {
-    display: flex;
-}
-.tvc-btn-icon-text svg {
-    height: 22px;
-    padding-right: 8px;
-    width: 22px;
-}
-.tvc-btn-red {
     background-color: var(--main-red-background-color);
     box-shadow: 8px 8px var(--main-light-bg-color), 8px 8px 0px 1px var(--main-red-background-color);
     color: white;
+    font-size: 17px;
+    padding: 12px 24px;
+    text-transform: uppercase;
 }
 /********************/
 /* END_LANDING_PAGE */
@@ -705,10 +692,6 @@ a {
     .tvc-lp-welcome > span {
         font-size: 118px;
         letter-spacing: -7px;
-    }
-    .tvc-lp-btn-container {
-        align-items: center;
-        flex-direction: column;
     }
     
     .tvc-training-container {
