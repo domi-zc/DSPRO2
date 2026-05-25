@@ -327,7 +327,9 @@ a {
     box-shadow: 0 0 15px 0 #000000a1;
 }
 .tvc-training-grid-card-details p {
-    margin: 0 0 16px;
+    display: inline-block;
+    margin: 0;
+    padding: 0 0 16px;
 }
 .tvc-training-mode {
     margin-top: 30px;
@@ -363,7 +365,8 @@ a {
     transform: translateX(300%);
 }
 .tvc-training-workout-grid h3 {
-    font-size: 43px;
+    display: inline-block;
+    font-size: 43px;   
 }
 .tvc-training-exercise-grid a {
     align-items: center;
