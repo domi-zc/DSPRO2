@@ -116,15 +116,26 @@ ws.onmessage = (event) => {
                 data.stats.up_next.forEach(step => {
                     const item = document.createElement('div');
                     item.className = 'tvc-workout-list-item';
-                    item.innerHTML = `
-                        <div class="tvc-wli-header">
-                            <strong>${step.name}</strong>
-                            <span>${step.set}</span>
-                        </div>
-                        <div class="tvc-wli-details">
-                            ${step.reps} Reps
-                        </div>
-                    `;
+
+                    const header = document.createElement('div');
+                    header.className = 'tvc-wli-header';
+
+                    const nameEl = document.createElement('strong');
+                    nameEl.textContent = step.name;
+
+                    const setEl = document.createElement('span');
+                    setEl.textContent = step.set;
+
+                    header.appendChild(nameEl);
+                    header.appendChild(setEl);
+
+                    const details = document.createElement('div');
+                    details.className = 'tvc-wli-details';
+                    details.textContent = `${step.reps} Reps`;
+
+                    item.appendChild(header);
+                    item.appendChild(details);
+                    
                     upNextList.appendChild(item);
                 });
             }
