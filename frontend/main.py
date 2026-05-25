@@ -124,14 +124,16 @@ async def workout_page(request: Request, workout_id: str):
     """
     Renders the UI for a structured JSON workout routine.
     """
-    file_path = os.path.join(root_dir, "workouts", f"{workout_id}.json")
-    
-    if not os.path.exists(file_path):
+    workouts_dir = os.path.abspath(os.path.join(root_dir, "workouts"))
+
+    file_path = os.path.normpath(os.path.join(workouts_dir, f"{workout_id}.json"))
+
+    if not (file_path.startswith(workouts_dir) and os.path.exists(file_path)):
         return RedirectResponse(url="/training")
-        
+    
     with open(file_path, "r") as f:
         workout_data = json.load(f)
-        
+
     return templates.TemplateResponse(
         request=request, 
         name="workout.html", 
