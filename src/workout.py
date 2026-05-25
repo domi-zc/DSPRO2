@@ -1,5 +1,6 @@
 import json
 import time
+import os
 
 from exercises import Squats, PushUps, PullUps, BicepsCurls, SitUps
 
@@ -23,7 +24,15 @@ class Workout:
             "Situps": SitUps,
         }
 
-        with open(json_path, "r") as file:
+        safe_path = os.path.abspath(os.path.normpath(json_path))
+        
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        safe_base_dir = os.path.abspath(os.path.join(current_dir, "..", "workouts"))
+        
+        if not safe_path.startswith(safe_base_dir):
+            raise PermissionError("Invalid workout path: Path traversal detected.")
+
+        with open(safe_path, "r") as file:
             workout_data = json.load(file)
 
         self.workout_name = workout_data["workout_name"]
