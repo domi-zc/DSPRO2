@@ -52,9 +52,9 @@
             <div>
                 <p>Change Excercise</p>
                 <div class="tvc-camera-container-stats-select">
-                    <select onchange="window.location.href='/exercise/' + this.value" data-cursor="-inverse -text">
+                    <select onchange="window.location.href='/exercise/' + encodeURIComponent(this.value)" data-cursor="-inverse -text">
                         {% for key, name in available_exercises.items() %}
-                            <option value="{{ key }}" {% if exercise_id == key %}selected{% endif %}>   
+                            <option value="{{ key }}" {% if exercise_id == key %}selected{% endif %}>
                                 {{ name }}
                             </option>
                         {% endfor %}
