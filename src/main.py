@@ -16,7 +16,7 @@ def main():
     source_frame = SourceFrame(start_time=int(time.time() * 1000))
     # source_frame = SourceFrame.from_video("videos/situps.mp4", start_time=int(time.time() * 1000))
 
-    workout = Workout("workouts/test_workout.json")
+    workout = Workout("workouts/legs_hard.json")
 
     print(f"---------- Loaded workout: {workout.workout_name} ----------")
     print('---------- Received frames ----------')
